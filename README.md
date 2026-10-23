@@ -1,21 +1,21 @@
-# motor_protection
-# ⚡ Motor Protection System — RTL-to-GDSII ASIC Design
+# ⚡ Design and RTL-to-GDS Implementation of an Intelligent Industrial Motor Protection Controller with Fault Prioritization and Automatic Recovery
 
 ## 📌 Overview
 
-The **Motor Protection System** is a digital hardware project designed to monitor motor operating conditions and detect faults such as overload, overtemperature, and supply faults.
+The **Intelligent Industrial Motor Protection Controller** is a digital hardware project designed to monitor motor operating conditions and detect faults such as overload, overtemperature, and supply faults.
 
 The system uses Verilog HDL to implement motor protection logic and follows the **RTL-to-GDSII ASIC design flow** using OpenLane and the SKY130A open-source Process Design Kit (PDK).
 
-The main objective is to detect abnormal operating conditions, generate fault alerts, and control motor operation to improve protection and reliability.
+The main objective is to detect abnormal operating conditions, prioritize faults, generate fault alerts, and control motor operation to improve protection and reliability. Automatic recovery functionality should be verified against the actual RTL implementation before claiming it as a completed feature.
 
 ## 🎯 Objectives
 
-- Design a motor protection system using Verilog HDL.
+- Design an intelligent motor protection controller using Verilog HDL.
 - Detect overload, overtemperature, and supply faults.
 - Filter sensor inputs to improve signal reliability.
 - Implement fault detection and prioritization.
 - Control motor operation using digital control logic.
+- Support automatic recovery where implemented and verified.
 - Verify functionality through RTL simulation.
 - Perform synthesis and physical design using OpenLane.
 - Generate physical design outputs for ASIC implementation.
@@ -34,6 +34,7 @@ The system receives sensor inputs and a motor start request. The protection logi
 5. Motor controller
 6. Fault status and lockout logic
 7. Output status generation
+8. Automatic recovery logic, if implemented
 
 ## 🔧 Technologies and Tools
 
@@ -78,7 +79,7 @@ Processes sensor inputs to reduce the effect of unwanted signal changes before t
 
 ### 3. Fault Detector
 
-Detects abnormal operating conditions based on the sensor signals and generates fault information.
+Detects abnormal operating conditions based on sensor signals and generates fault information.
 
 ### 4. Motor Controller FSM
 
@@ -86,7 +87,7 @@ Uses a finite-state machine to control motor operation based on start requests, 
 
 ### 5. Vibration Monitor
 
-Monitors the vibration-related input logic to support additional motor protection functionality, if enabled in the implemented design.
+Monitors vibration-related input logic to support additional motor protection functionality, if enabled in the implemented design.
 
 ### 6. Testbench
 
@@ -128,7 +129,7 @@ RTL simulation is used to verify the functional behavior of the design before sy
 
 ### Compile the RTL
 
-Run the following commands from the directory containing the Verilog source files. Adjust filenames and paths to match your project.
+Run the following command from the directory containing the Verilog source files. Adjust the filenames and paths to match your project.
 
 ```bash
 iverilog -g2012 -s tb_motor_protection \
@@ -165,7 +166,9 @@ The testbench can be used to check:
 - Overtemperature detection
 - Supply fault detection
 - Motor shutdown during fault conditions
+- Fault prioritization
 - Fault status and lockout behavior
+- Automatic recovery after fault clearance, if implemented
 
 Actual verification results should be documented after running the testbench.
 
@@ -218,7 +221,7 @@ The project uses OpenSTA to examine timing paths and timing slack.
 ### Timing Metrics
 
 - **Worst Negative Slack (WNS):** The worst slack value among the analyzed timing paths.
-- **Total Negative Slack (TNS):** The sum of negative slack values for the analyzed paths.
+- **Total Negative Slack (TNS):** The sum of negative slack values for the analyzed timing paths.
 - **Setup Timing:** Checks whether data arrives before the required clock edge.
 - **Hold Timing:** Checks whether data remains stable for the required time after the clock edge.
 - **Parasitic Analysis:** Uses extracted interconnect information, such as SPEF, to estimate the impact of wiring on timing.
@@ -235,7 +238,7 @@ The current standalone analysis reported:
 | Worst slack reported | 17.20 ns |
 | Total negative slack reported | 0.00 ns |
 
-These values are from the current standalone STA setup with assumed input/output delays. They should not be treated as final signoff results until the timing constraints, parasitic annotation, and setup/hold coverage have been validated.
+These values are from the current standalone STA setup with assumed input/output delays. They should not be treated as final signoff results until timing constraints, parasitic annotation, and setup/hold coverage have been validated.
 
 ## 📊 Physical Design Outputs
 
@@ -265,45 +268,10 @@ These outputs can be inspected to understand the progression from RTL to physica
 - Modular Verilog RTL design
 - ASIC synthesis and physical implementation flow
 - Timing analysis using OpenSTA
+- Automatic recovery support, subject to RTL implementation and verification
 
 ## 🚀 Future Improvements
 
 - Add additional motor fault detection mechanisms.
 - Improve sensor filtering and fault response logic.
-- Implement configurable fault thresholds where appropriate.
-- Expand the testbench to cover more corner cases.
-- Validate reset recovery and removal timing.
-- Verify parasitic annotation and complete setup/hold timing coverage.
-- Perform design-rule and layout-versus-schematic checks.
-- Optimize area, power, and timing.
-- Validate the final GDSII output before any tapeout submission.
-
-## 📚 Learning Outcomes
-
-Through this project, the following concepts can be explored:
-
-- Verilog RTL design
-- Finite-state machines
-- Digital fault detection
-- RTL simulation and waveform analysis
-- Logic synthesis
-- Standard-cell-based ASIC implementation
-- Floorplanning and placement
-- Clock tree synthesis
-- Routing and parasitic extraction
-- Static timing analysis
-- RTL-to-GDSII design methodology
-
-## 👨‍💻 Author
-
-**Anirudh Gatla**
-
-Electronics and Communication Engineering
-
-Interests: VLSI Design, RTL Design, ASIC Physical Design, and Static Timing Analysis.
-
-## 📝 Conclusion
-
-The Motor Protection System demonstrates the development of digital protection logic using Verilog HDL and its implementation through an ASIC design flow.
-
-The project combines RTL design, functional verification, logic synthesis, physical design, and timing analysis using open-source tools and the SKY130A PDK. It provides practical experience with the major stages involved in transforming a digital hardware design into a physical ASIC layout.
+- Implement configurable fault thresholds where
